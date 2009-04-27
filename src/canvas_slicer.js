@@ -29,3 +29,7 @@ var CanvasSlicer = Class.create({
     }
     
 });
+
+CanvasSlicer.isSupported = function() {
+    return document.createElement('canvas').getContext != null;
+}
