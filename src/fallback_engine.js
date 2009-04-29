@@ -13,17 +13,10 @@ var FallbackEngine = Class.create({
         // |0|1|2|
         // |3|4|5|
         // |6|7|8|
-        var slice0 = this.slicer.slice(image, 0, 0, cuts.leftWidth, cuts.topHeight);
-        var slice1 = this.slicer.slice(image, cuts.left, 0, cuts.centerWidth, cuts.topHeight);
-        var slice2 = this.slicer.slice(image, cuts.right, 0, cuts.rightWidth, cuts.topHeight);
-
-        var slice3 = this.slicer.slice(image, 0, cuts.top, cuts.leftWidth, cuts.centerHeight);
-        var slice4 = this.slicer.slice(image, cuts.left, cuts.top, cuts.centerWidth, cuts.centerHeight);
-        var slice5 = this.slicer.slice(image, cuts.right, cuts.top, cuts.rightWidth, cuts.centerHeight);
-
-        var slice6 = this.slicer.slice(image, 0, cuts.bottom, cuts.leftWidth, cuts.bottomHeight);
-        var slice7 = this.slicer.slice(image, cuts.left, cuts.bottom, cuts.centerWidth, cuts.bottomHeight);
-        var slice8 = this.slicer.slice(image, cuts.right, cuts.bottom, cuts.rightWidth, cuts.bottomHeight);
+        var slicer = this.slicer;
+        var slices = cuts.map(function(cut) {
+            return slicer.slice(image,cut.x, cut.y, cut.w, cut.h);
+        });
 
         //Step 2: Create Wrapper
 
@@ -68,26 +61,26 @@ var FallbackEngine = Class.create({
             left:'-'+borderLeft,
             height: borderTop,
             width: borderLeft
-        }, slice0, element);
+        }, slices[0], element);
         this.drawBorder({
             top:'-'+borderTop,
             left: 0,
             width: '100%',
             height: borderTop
-        }, slice1, element);
+        }, slices[1], element);
         this.drawBorder({
             top:'-'+borderTop,
             right:'-'+borderRight,
             height: borderTop,
             width: borderRight
-        }, slice2, element);
+        }, slices[2], element);
         this.drawBorder({
             top: 0,
             bottom:0,
             left:'-'+borderLeft,
             width: borderLeft,
             height: '100%'
-        }, slice3, element);
+        }, slices[3], element);
         this.drawBorder({
             left: 0,
             top: 0,
@@ -95,32 +88,32 @@ var FallbackEngine = Class.create({
             bottom: 0,
             height: '100%',
             width: '100%'
-        }, slice4, element);
+        }, slices[4], element);
         this.drawBorder({
             top: 0,
             bottom:0,
             right:'-'+borderRight,
             width: borderRight,
             height: '100%'
-        }, slice5, element);
+        }, slices[5], element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             left:'-'+borderLeft,
             width: borderLeft,
             height: borderBottom
-        }, slice6, element);
+        }, slices[6], element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             left: 0,
             width:'100%',
             height: borderBottom
-        }, slice7, element);
+        }, slices[7], element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             right:'-'+borderRight,
             height: borderBottom,
             width: borderRight
-        }, slice8, element);
+        }, slices[8], element);
 
         return wrapper;
     },

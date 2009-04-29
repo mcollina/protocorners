@@ -94,6 +94,39 @@
                         assertEqual(50, cuts.left);
                         assertEqual(130, cuts.centerWidth);
                         assertEqual(150, cuts.centerHeight);
+                    }},
+
+                testGet : function() { with(this) {
+                        var cuts = new Cuts(200, 200, "10px", "20", "40", "50px");
+
+                        // |0|1|2|
+                        // |3|4|5|
+                        // |6|7|8|
+                        assertHashEqual({x : 0, y : 0, w : cuts.leftWidth, h : cuts.topHeight}, cuts.get(0));
+                        assertHashEqual({x : cuts.left, y : 0, w : cuts.centerWidth, h : cuts.topHeight}, cuts.get(1));
+                        assertHashEqual({x : cuts.right, y : 0, w : cuts.rightWidth, h : cuts.topHeight}, cuts.get(2));
+
+                        assertHashEqual({x : 0, y : cuts.top, w : cuts.leftWidth, h : cuts.centerHeight}, cuts.get(3));
+                        assertHashEqual({x : cuts.left, y : cuts.top, w : cuts.centerWidth, h : cuts.centerHeight}, cuts.get(4));
+                        assertHashEqual({x : cuts.right, y : cuts.top, w : cuts.rightWidth, h : cuts.centerHeight}, cuts.get(5));
+
+                        assertHashEqual({x : 0, y : cuts.bottom, w : cuts.leftWidth, h : cuts.bottomHeight}, cuts.get(6));
+                        assertHashEqual({x : cuts.left, y : cuts.bottom, w : cuts.centerWidth, h : cuts.bottomHeight}, cuts.get(7));
+                        assertHashEqual({x : cuts.right, y : cuts.bottom, w : cuts.rightWidth, h : cuts.bottomHeight}, cuts.get(8));
+                    }},
+
+                testEnumerable : function() { with(this) {
+                        var cuts = new Cuts(200, 200, "10px", "20", "40", "50px");
+                        var expected = [];
+                        $R(0,8).each(function(i) {
+                            expected[i] = cuts.get(i);
+                        });
+                        var result = [];
+                        var i = 0
+                        cuts.each(function(element) {
+                            result[i++] = element;
+                        });
+                        assertHashEqual(expected, result);
                     }}
                 
             }, {testLog: "testlog"});
