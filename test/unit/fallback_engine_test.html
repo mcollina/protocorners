@@ -55,7 +55,7 @@
 
                 testAddBorderImage: function() { with(this) {
                         var element = new Element("div").update("Hello World");
-                        element.setStyle({borderWidth : "10px" });
+                        element.setStyle({borderWidth : "10px", display : "inline"});
                         $('sample').appendChild(element);
                         element.setStyle({ color : "red" });
                         var image = $("test-img");

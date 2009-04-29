@@ -33,35 +33,34 @@ var FallbackEngine = Class.create({
             paddingLeft : element.getStyle('paddingLeft'),
             paddingBottom : element.getStyle('paddingBottom'),
             paddingRight : element.getStyle('paddingRight'),
-            //            borderTop : element.getStyle('borderTopWidth'),
-            //            borderBottom : element.getStyle('borderBottomWidth'),
-            //            borderLeft : element.getStyle('borderLeftWidth'),
-            //            borderRight : element.getStyle('borderRigthWidth'),
             position : 'relative'
         });
 
-        element.wrap(wrapper);
+        wrapper.innerHTML = element.innerHTML;
+        element.innerHTML = '';
+
+        element.appendChild(wrapper);
 
         element.setStyle({
             position: 'relative',
             borderColor: 'transparent',
-            //border: 0,
             padding: 0
         });
 
-        // TODO add particolar case handling
+        // There is many case where "display: 'inline'" actually is a problem.
+        if(element.style.display == 'inline')
+            element.style.display = 'inline-block';
+        // IE7 Should be served inline instead of inline-block
+        //        else if((($.browser.msie && $.browser.version == 7)
+        //            || (document.documentMode && document.documentMode == 7))
+        //        && $this.css('display') == 'inline-block')
+        //            thisStyle.display = 'inline';
 
         //Step 3: Draw Borders
         var borderTop = element.getStyle('borderTopWidth');
         var borderBottom = element.getStyle('borderBottomWidth');
         var borderLeft = element.getStyle('borderLeftWidth');
-        var borderRight = element.getStyle('borderRigthWidth');
-
-        //        var borderTop = cuts.topHeight + "px";
-        //        var borderBottom = cuts.bottomHeight+ "px";
-        //        var borderLeft = cuts.leftWidth + "px";
-        //        var borderRight = cuts.rightWidth+ "px";
-
+        var borderRight = element.getStyle('borderRightWidth');
 
         // Create the magical tiles
         this.drawBorder({
@@ -69,26 +68,26 @@ var FallbackEngine = Class.create({
             left:'-'+borderLeft,
             height: borderTop,
             width: borderLeft
-        }, slice0, wrapper);
+        }, slice0, element);
         this.drawBorder({
             top:'-'+borderTop,
             left: 0,
             width: '100%',
             height: borderTop
-        }, slice1, wrapper);
+        }, slice1, element);
         this.drawBorder({
             top:'-'+borderTop,
             right:'-'+borderRight,
             height: borderTop,
             width: borderRight
-        }, slice2, wrapper);
+        }, slice2, element);
         this.drawBorder({
             top: 0,
             bottom:0,
             left:'-'+borderLeft,
             width: borderLeft,
             height: '100%'
-        }, slice3, wrapper);
+        }, slice3, element);
         this.drawBorder({
             left: 0,
             top: 0,
@@ -96,32 +95,32 @@ var FallbackEngine = Class.create({
             bottom: 0,
             height: '100%',
             width: '100%'
-        }, slice4, wrapper);
+        }, slice4, element);
         this.drawBorder({
             top: 0,
             bottom:0,
             right:'-'+borderRight,
             width: borderRight,
             height: '100%'
-        }, slice5, wrapper);
+        }, slice5, element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             left:'-'+borderLeft,
             width: borderLeft,
             height: borderBottom
-        }, slice6, wrapper);
+        }, slice6, element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             left: 0,
             width:'100%',
             height: borderBottom
-        }, slice7, wrapper);
+        }, slice7, element);
         this.drawBorder({
             bottom:'-'+borderBottom,
             right:'-'+borderRight,
             height: borderBottom,
             width: borderRight
-        }, slice8, wrapper);
+        }, slice8, element);
 
         return wrapper;
     },
