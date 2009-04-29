@@ -55,88 +55,13 @@ var FallbackEngine = Class.create({
         var borderLeft = element.getStyle('borderLeftWidth');
         var borderRight = element.getStyle('borderRightWidth');
 
-        // Create the magical tiles
-        this.drawBorder({
-            top:'-'+borderTop,
-            left:'-'+borderLeft,
-            height: borderTop,
-            width: borderLeft
-        }, slices[0], element);
-        this.drawBorder({
-            top:'-'+borderTop,
-            left: 0,
-            width: '100%',
-            height: borderTop
-        }, slices[1], element);
-        this.drawBorder({
-            top:'-'+borderTop,
-            right:'-'+borderRight,
-            height: borderTop,
-            width: borderRight
-        }, slices[2], element);
-        this.drawBorder({
-            top: 0,
-            bottom:0,
-            left:'-'+borderLeft,
-            width: borderLeft,
-            height: '100%'
-        }, slices[3], element);
-        this.drawBorder({
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            height: '100%',
-            width: '100%'
-        }, slices[4], element);
-        this.drawBorder({
-            top: 0,
-            bottom:0,
-            right:'-'+borderRight,
-            width: borderRight,
-            height: '100%'
-        }, slices[5], element);
-        this.drawBorder({
-            bottom:'-'+borderBottom,
-            left:'-'+borderLeft,
-            width: borderLeft,
-            height: borderBottom
-        }, slices[6], element);
-        this.drawBorder({
-            bottom:'-'+borderBottom,
-            left: 0,
-            width:'100%',
-            height: borderBottom
-        }, slices[7], element);
-        this.drawBorder({
-            bottom:'-'+borderBottom,
-            right:'-'+borderRight,
-            height: borderBottom,
-            width: borderRight
-        }, slices[8], element);
+        slices.each(function(slice, index) {
+            this.drawBorder(this.buildBorderStyle(index, borderTop, borderRight, borderBottom, borderLeft), slice, element)
+        }, FallbackEngine);
 
-        return wrapper;
-    },
-
-    drawBorder : function (style, slice, wrapper) {
-        // Don't waste time drawing borders with null dimension
-        if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
-            slice.style.width = slice.style.height = '100%';
-            slice.style.position = 'absolute';
-            slice.style.border = 'none';
-
-            var el = document.createElement('div');
-            style.position = 'absolute';
-            style.textAlign = "left";
-            el.setStyle(style);
-            el.appendChild(slice.cloneNode(true));
-            wrapper.insert({
-                top : el
-            });
-        }
+        return element;
     }
 
-    
 });
 
 FallbackEngine.getSlicer = function() {
@@ -147,3 +72,46 @@ FallbackEngine.getSlicer = function() {
     }
 }
 
+FallbackEngine.buildBorderStyle = function(sliceNumber, borderTop, borderRight, borderBottom, borderLeft) {
+    var style = {};
+
+    if([0,3,6].include(sliceNumber)) {          // first column
+        style.left = "-" + borderLeft;
+        style.width = borderLeft;
+    } else if([2,5,8].include(sliceNumber)) {   // third column
+        style.right = "-" + borderRight;
+        style.width = borderRight;
+    } else {                                    // second column
+        style.width = "100%";
+    }
+    
+    if([0,1,2].include(sliceNumber)) {          // first line
+        style.top = "-" + borderTop;
+        style.height = borderTop;
+    } else if([6,7,8].include(sliceNumber)) {   // third line
+        style.bottom = "-" + borderBottom;
+        style.height = borderBottom;
+    } else {                                    // second line
+        style.height = "100%";
+    }
+
+    return style;
+}
+
+FallbackEngine.drawBorder = function (style, slice, wrapper) {
+    // Don't waste time drawing borders with null dimension
+    if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
+        slice.style.width = slice.style.height = '100%';
+        slice.style.position = 'absolute';
+        slice.style.border = 'none';
+
+        var el = document.createElement('div');
+        style.position = 'absolute';
+        style.textAlign = "left";
+        el.setStyle(style);
+        el.appendChild(slice.cloneNode(true));
+        wrapper.insert({
+            top : el
+        });
+    }
+}

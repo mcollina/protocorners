@@ -27,7 +27,7 @@
             <div id="testlog"></div>
 
             <br />
-            
+
             <!-- Put sample/test html here -->
             <div id="sample"></div>
 
@@ -60,6 +60,62 @@
                         element.setStyle({ color : "red" });
                         var image = $("test-img");
                         this.instance.addBorderImage(element, image, new Cuts(image.getHeight(), image.getWidth(), "20px"));
+                    }},
+
+                testBuildBorderStyle : function() {with(this) {
+                        var borderTop = "10";
+                        var borderBottom = "20";
+                        var borderLeft = "30";
+                        var borderRight = "40";
+                        var e = FallbackEngine;
+                        assertHashEqual({
+                            top:'-'+borderTop,
+                            left:'-'+borderLeft,
+                            height: borderTop,
+                            width: borderLeft
+                        }, e.buildBorderStyle(0, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            top:'-'+borderTop,
+                            width: '100%',
+                            height: borderTop
+                        }, e.buildBorderStyle(1, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            top:'-'+borderTop,
+                            right:'-'+borderRight,
+                            height: borderTop,
+                            width: borderRight
+                        }, e.buildBorderStyle(2, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            left:'-'+borderLeft,
+                            width: borderLeft,
+                            height: '100%'
+                        }, e.buildBorderStyle(3, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            height: '100%',
+                            width: '100%'
+                        }, e.buildBorderStyle(4, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            right:'-'+borderRight,
+                            width: borderRight,
+                            height: '100%'
+                        }, e.buildBorderStyle(5, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            bottom:'-'+borderBottom,
+                            left:'-'+borderLeft,
+                            width: borderLeft,
+                            height: borderBottom
+                        }, e.buildBorderStyle(6, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            bottom:'-'+borderBottom,
+                            width:'100%',
+                            height: borderBottom
+                        }, e.buildBorderStyle(7, borderTop, borderRight, borderBottom, borderLeft));
+                        assertHashEqual({
+                            bottom:'-'+borderBottom,
+                            right:'-'+borderRight,
+                            height: borderBottom,
+                            width: borderRight
+                        }, e.buildBorderStyle(8, borderTop, borderRight, borderBottom, borderLeft));
                     }}
     
             }, {testLog: "testlog"});
