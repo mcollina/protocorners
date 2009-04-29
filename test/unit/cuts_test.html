@@ -70,8 +70,32 @@
                         assertEqual(180, cuts.right);
                         assertEqual(170, cuts.bottom);
                         assertEqual(20, cuts.left);
+                    }},
+
+                testHeightsAndWidths: function() { with(this) {
+                        var cuts = new Cuts(200, 200, "10%", "20%", "40%", "50%");
+                        assertEqual(20, cuts.topHeight);
+                        assertEqual(40, cuts.rightWidth);
+                        assertEqual(80, cuts.bottomHeight);
+                        assertEqual(100, cuts.leftWidth);
+                    }},
+
+                testImageData: function() { with(this) {
+                        var cuts = new Cuts(200, 100, "10%", "20%", "40%", "50%");
+                        assertEqual(200, cuts.width);
+                        assertEqual(100, cuts.height);
+                    }},
+
+                testCenterHeightCenterWidth: function()  { with(this) {
+                        var cuts = new Cuts(200, 200, "10px", "20", "40", "50px");
+                        assertEqual(10, cuts.top);
+                        assertEqual(180, cuts.right);
+                        assertEqual(160, cuts.bottom);
+                        assertEqual(50, cuts.left);
+                        assertEqual(130, cuts.centerWidth);
+                        assertEqual(150, cuts.centerHeight);
                     }}
-    
+                
             }, {testLog: "testlog"});
             // For each Test.UnitRunner instance, specify the element id where results will be
             // published; e.g. <div id="testlog"/> above.

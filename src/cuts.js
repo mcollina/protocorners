@@ -2,15 +2,20 @@
 var Cuts = Class.create({
 
     initialize : function() {
-        // args order: width, height, top, right, bottom, left
+        // args order: this.width, this.height, top, right, bottom, left
         var args = $A(arguments);
-        width = args.shift();
-        height = args.shift();
+        this.width = args.shift();
+        this.height = args.shift();
 
-        this.top = Cuts.parse(height, args.shift());
-        this.right = (args.size() == 0) ? width - this.top : width - Cuts.parse(width, args.shift());
-        this.bottom = (args.size() == 0) ? height - this.top : height - Cuts.parse(height, args.shift());
-        this.left = (args.size() == 0) ? width - this.right : Cuts.parse(width, args.shift());
+        this.top = this.topHeight = Cuts.parse(this.height, args.shift());
+        this.rightWidth = (args.size() == 0) ? this.top : Cuts.parse(this.width, args.shift());
+        this.right = this.width - this.rightWidth;
+        this.bottomHeight = (args.size() == 0) ? this.topHeight : Cuts.parse(this.height, args.shift());
+        this.bottom = this.height - this.bottomHeight;
+        this.left = this.leftWidth = (args.size() == 0) ? this.rightWidth : Cuts.parse(this.width, args.shift());
+        
+        this.centerHeight = this.bottom - this.top;
+        this.centerWidth = this.right - this.left;
     }
 });
 
