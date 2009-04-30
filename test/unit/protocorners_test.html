@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <title>JavaScript unit test file</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <script src="../assets/jsunittest.js" type="text/javascript"></script>
+        <script src="../../src/ext/prototype.js" type="text/javascript"></script>
+        <script src="../../src/cuts.js" type="text/javascript"></script>
+        <script src="../../src/protocorners.js" type="text/javascript"></script>
+
+        <link rel="stylesheet" href="../assets/unittest.css" type="text/css" />
+    </head>
+    <body>
+
+        <div id="content">
+
+            <div id="header">
+                <h1>JavaScript unit test file</h1>
+                <p>
+                    This file tests <strong>protocorners.js</strong>.
+                </p>
+            </div>
+
+            <!-- Log output (one per Runner, via {testLog: "testlog"} option)-->
+            <div id="testlog"></div>
+
+            <!-- Put sample/test html here -->
+            <div id="sample"></div>
+        </div>
+
+        <script type="text/javascript">
+            // <![CDATA[
+
+            FallbackEngine = {};
+
+            new Test.Unit.Runner({
+  
+                testProtoCornersExists: function() { with(this) {
+                        assertNotNull(ProtoCorners);
+                    }},
+
+                testProtoCornersFallbackEngineSupported: function() { with(this) {
+                        FallbackEngine.isSupported = function() {
+                            FallbackEngine.supportedCalled = true;
+                            return true;
+                        }
+                        assertEqual(true, ProtoCorners.isSupported());
+                        assertEqual(true, FallbackEngine.supportedCalled);
+                    }},
+
+                testFallbackEngineBorderImage: function() { with(this) {
+                        FallbackEngine.isSupported = function() {
+                            FallbackEngine.supportedCalled = true;
+                            return true;
+                        };
+                        FallbackEngine.addBorderImage = function() {
+                            FallbackEngine.border_arguments = $A(arguments);
+                        };
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = ProtoCorners.borderImage(element, img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(FallbackEngine.arguments);
+
+                        assertEqual(element,FallbackEngine.border_arguments.shift());
+                        assertEqual(img,FallbackEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = FallbackEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, FallbackEngine.supportedCalled);
+
+                    }},
+
+                testFallbackEngineBorderImageElement: function() { with(this) {
+                        FallbackEngine.isSupported = function() {
+                            FallbackEngine.supportedCalled = true;
+                            return true;
+                        };
+                        FallbackEngine.addBorderImage = function() {
+                            FallbackEngine.border_arguments = $A(arguments);
+                        };
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = Element.borderImage(element, img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(FallbackEngine.arguments);
+
+                        assertEqual(element,FallbackEngine.border_arguments.shift());
+                        assertEqual(img,FallbackEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = FallbackEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, FallbackEngine.supportedCalled);
+
+                    }},
+
+                    testFallbackEngineBorderImageElementMethod: function() { with(this) {
+                        FallbackEngine.isSupported = function() {
+                            FallbackEngine.supportedCalled = true;
+                            return true;
+                        };
+                        FallbackEngine.addBorderImage = function() {
+                            FallbackEngine.border_arguments = $A(arguments);
+                        };
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = element.borderImage(img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(FallbackEngine.arguments);
+
+                        assertEqual(element,FallbackEngine.border_arguments.shift());
+                        assertEqual(img,FallbackEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = FallbackEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, FallbackEngine.supportedCalled);
+
+                    }}
+
+
+    
+            }, {testLog: "testlog"});
+            // For each Test.UnitRunner instance, specify the element id where results will be
+            // published; e.g. <div id="testlog"/> above.
+            // That is, you can have multiple "new Test.Unit.Runner() { ... }" on this page, just
+            // create more <div id="testlog2"></div> etc, and pass the element id to the hash above:
+            // e.g. {testLog: "testlog2"}
+            // ]]>
+        </script>
+    </body>
+</html>
