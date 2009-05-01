@@ -67,10 +67,16 @@ var FallbackEngine = Class.create({
 FallbackEngine.getSlicer = function() {
     if(CanvasSlicer.isSupported()) {
         return new CanvasSlicer();
+    } else if(VMLSlicer.isSupported()) {
+        return new VMLSlicer();
     } else {
-        throw "This browser doesn't support any slicer.";
+        throw new Error("This browser doesn't support any slicer.");
     }
 }
+
+FallbackEngine.isSupported = function() {
+    return CanvasSlicer.isSupported() || VMLSlicer.isSupported();
+};
 
 FallbackEngine.buildBorderStyle = function(sliceNumber, borderTop, borderRight, borderBottom, borderLeft) {
     var style = {};
@@ -100,7 +106,7 @@ FallbackEngine.buildBorderStyle = function(sliceNumber, borderTop, borderRight, 
 
 FallbackEngine.drawBorder = function (style, slice, wrapper) {
     // Don't waste time drawing borders with null dimension
-    if(parseInt(style.width) != 0 && parseInt(style.height) != 0) {
+    if(slice != null && parseInt(style.width) != 0 && parseInt(style.height) != 0) {
         slice.style.width = slice.style.height = '100%';
         slice.style.position = 'absolute';
         slice.style.border = 'none';

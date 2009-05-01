@@ -19,7 +19,7 @@ var CanvasSlicer = Class.create({
             //el.className = 'biSlice image';
             return el;
         } else {
-            return document.createDocumentFragment();
+            return null;
         }
 
         //alert("sx: " + sx + ", sy: " + sy + ", sw: " + sw + ", sh: " + sh );
