@@ -11,6 +11,10 @@ Notes:
     environament configuration 'security.fileuri.strict_origin_policy' to
     true.
 
+    In order to make the script work with IE and if you want to use the
+    "display : inline" style you should add the css property "float" to your
+    elements.
+
 More information:
     http://NOTE-ENTER-URL.com
     

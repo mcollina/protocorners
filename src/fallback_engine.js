@@ -25,6 +25,7 @@ var FallbackEngine = Class.create({
             paddingLeft : element.getStyle('paddingLeft'),
             paddingBottom : element.getStyle('paddingBottom'),
             paddingRight : element.getStyle('paddingRight'),
+
             position : 'relative'
         });
 
@@ -38,19 +39,18 @@ var FallbackEngine = Class.create({
         // There is many case where "display: 'inline'" actually is a problem.
         if(display == 'inline')
             display = 'inline-block';
+        
         // IE7 Should be served inline instead of inline-block
         if(document.documentMode && document.documentMode == 7 && display == 'inline-block') {
             display = 'inline';
         }
-
+        
         element.setStyle({
             position: 'relative',
             borderColor: 'transparent',
             display : display,
             padding: 0
         });
-
-        //alert(element.getStyle("display")); //hack to IE stupidity
 
         //Step 3: Draw Borders
         var borderTop = element.getStyle('borderTopWidth');
@@ -63,8 +63,8 @@ var FallbackEngine = Class.create({
         }, FallbackEngine);
 
         // stupid trick to fix an IE bug.
-        element.innerHTML = element.innerHTML;
-        
+        element.outerHTML = element.outerHTML;
+
         return element;
     }
 
@@ -123,10 +123,10 @@ FallbackEngine.drawBorder = function (style, slice, slice_container) {
         var el = new Element("div");
         style.position = 'absolute';
         style.textAlign = "left";
-        //here internet explorer does something bad.
         el.setStyle(style);
 
         el.insert(slice);
+        //here internet explorer does something bad.
         slice_container.insert({
             top : el
         });

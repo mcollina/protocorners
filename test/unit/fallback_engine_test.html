@@ -75,12 +75,12 @@
                         element.setStyle({ color : "red" });
                         var image = $("test-img");
                         this.instance.addBorderImage(element, image, new Cuts(image.getHeight(), image.getWidth(), "20px"));
-                        alert("completed");
                 }},
 
                 testAddBorderImage2: function() { with(this) {
+                        //var element = new Element("div").update("Another one!<br/> Pua pua pua!");
                         var element = new Element("div").update("Another one!");
-                        element.setStyle({borderWidth : "10px", display : "inline", margin : "20px"});
+                        element.setStyle({borderWidth : "10px", float : "left", margin : "20px"});
                         $('sample').appendChild(element);
                         element.setStyle({ color : "red" });
                         var image = $("test-img");
