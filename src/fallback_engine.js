@@ -5,7 +5,6 @@ var FallbackEngine = Class.create({
     },
 
     addBorderImage : function(element, image, cuts) {
-        
         element = $(element);
 
         //Step 1: Create Slices
@@ -31,23 +30,27 @@ var FallbackEngine = Class.create({
 
         wrapper.innerHTML = element.innerHTML;
         element.innerHTML = '';
-
+        
         element.appendChild(wrapper);
+
+        var display = element.getStyle("display");
+
+        // There is many case where "display: 'inline'" actually is a problem.
+        if(display == 'inline')
+            display = 'inline-block';
+        // IE7 Should be served inline instead of inline-block
+        if(document.documentMode && document.documentMode == 7 && display == 'inline-block') {
+            display = 'inline';
+        }
 
         element.setStyle({
             position: 'relative',
             borderColor: 'transparent',
+            display : display,
             padding: 0
         });
 
-        // There is many case where "display: 'inline'" actually is a problem.
-        if(element.style.display == 'inline')
-            element.style.display = 'inline-block';
-        // IE7 Should be served inline instead of inline-block
-        //        else if((($.browser.msie && $.browser.version == 7)
-        //            || (document.documentMode && document.documentMode == 7))
-        //        && $this.css('display') == 'inline-block')
-        //            thisStyle.display = 'inline';
+        //alert(element.getStyle("display")); //hack to IE stupidity
 
         //Step 3: Draw Borders
         var borderTop = element.getStyle('borderTopWidth');
@@ -59,6 +62,9 @@ var FallbackEngine = Class.create({
             this.drawBorder(this.buildBorderStyle(index, borderTop, borderRight, borderBottom, borderLeft), slice, element)
         }, FallbackEngine);
 
+        // stupid trick to fix an IE bug.
+        element.innerHTML = element.innerHTML;
+        
         return element;
     }
 
@@ -104,19 +110,24 @@ FallbackEngine.buildBorderStyle = function(sliceNumber, borderTop, borderRight, 
     return style;
 }
 
-FallbackEngine.drawBorder = function (style, slice, wrapper) {
+FallbackEngine.drawBorder = function (style, slice, slice_container) {
     // Don't waste time drawing borders with null dimension
     if(slice != null && parseInt(style.width) != 0 && parseInt(style.height) != 0) {
-        slice.style.width = slice.style.height = '100%';
-        slice.style.position = 'absolute';
-        slice.style.border = 'none';
+        slice.setStyle({
+            width : '100%',
+            height : '100%',
+            position : 'absolute',
+            border : 'none'
+        });
 
-        var el = document.createElement('div');
+        var el = new Element("div");
         style.position = 'absolute';
         style.textAlign = "left";
+        //here internet explorer does something bad.
         el.setStyle(style);
-        el.appendChild(slice.cloneNode(true));
-        wrapper.insert({
+
+        el.insert(slice);
+        slice_container.insert({
             top : el
         });
     }

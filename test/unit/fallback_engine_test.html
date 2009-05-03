@@ -4,6 +4,7 @@
     <head>
         <title>JavaScript unit test file</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
         <script src="../assets/jsunittest.js" type="text/javascript"></script>
         <script src="../../src/ext/prototype.js" type="text/javascript"></script>
         <script src="../../src/cuts.js" type="text/javascript"></script>
@@ -36,6 +37,14 @@
             <!-- Put sample/test html here -->
             <div id="sample"></div>
 
+
+            <br />
+            <br />
+            <br />
+
+            <!-- Put sample/test html here -->
+            <div id="sample2"></div>
+
             <br />
             <br />
             <br />
@@ -61,6 +70,16 @@
 
                 testAddBorderImage: function() { with(this) {
                         var element = new Element("div").update("Hello World");
+                        element.setStyle({borderWidth : "10px", display : "inline", margin : "20px"});
+                        $('sample2').appendChild(element);
+                        element.setStyle({ color : "red" });
+                        var image = $("test-img");
+                        this.instance.addBorderImage(element, image, new Cuts(image.getHeight(), image.getWidth(), "20px"));
+                        alert("completed");
+                }},
+
+                testAddBorderImage2: function() { with(this) {
+                        var element = new Element("div").update("Another one!");
                         element.setStyle({borderWidth : "10px", display : "inline", margin : "20px"});
                         $('sample').appendChild(element);
                         element.setStyle({ color : "red" });
