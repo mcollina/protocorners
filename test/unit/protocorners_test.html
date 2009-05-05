@@ -32,31 +32,44 @@
         <script type="text/javascript">
             // <![CDATA[
 
-            FallbackEngine = {};
+            FallbackEngine = Class.create();
+            NativeEngine = Class.create();
 
             new Test.Unit.Runner({
+
+                setup : function() {
+                    FallbackEngine.isSupported = function() {
+                        FallbackEngine.supportedCalled = true;
+                        return FallbackEngine.supported;
+                    }
+                    FallbackEngine.supported = false;
+                    FallbackEngine.border_arguments = null;
+
+                    NativeEngine.isSupported = function() {
+                        NativeEngine.supportedCalled = true;
+                        return NativeEngine.supported;
+                    }
+                    NativeEngine.supported = false;
+                    NativeEngine.border_arguments = null;
+
+                    ProtoCorners.engine = null;
+                },
   
                 testProtoCornersExists: function() { with(this) {
                         assertNotNull(ProtoCorners);
                     }},
 
                 testProtoCornersFallbackEngineSupported: function() { with(this) {
-                        FallbackEngine.isSupported = function() {
-                            FallbackEngine.supportedCalled = true;
-                            return true;
-                        }
+                        FallbackEngine.supported = true;
                         assertEqual(true, ProtoCorners.isSupported());
                         assertEqual(true, FallbackEngine.supportedCalled);
                     }},
 
                 testFallbackEngineBorderImage: function() { with(this) {
-                        FallbackEngine.isSupported = function() {
-                            FallbackEngine.supportedCalled = true;
-                            return true;
-                        };
-                        FallbackEngine.addBorderImage = function() {
-                            FallbackEngine.border_arguments = $A(arguments);
-                        };
+                        FallbackEngine.supported = true;
+                        FallbackEngine.addMethods({addBorderImage : function() {
+                                FallbackEngine.border_arguments = $A(arguments);
+                            }});
 
                         var img = {};
                         img.getHeight = img.getWidth = function() { return 200; };
@@ -64,7 +77,7 @@
                         var element = new Element('div');
                         var result = ProtoCorners.borderImage(element, img, "10px","20px","40px","50px");
                         assertEqual(element, result);
-                        assertNotNull(FallbackEngine.arguments);
+                        assertNotNull(FallbackEngine.border_arguments);
 
                         assertEqual(element,FallbackEngine.border_arguments.shift());
                         assertEqual(img,FallbackEngine.border_arguments.shift());
@@ -83,13 +96,10 @@
                     }},
 
                 testFallbackEngineBorderImageElement: function() { with(this) {
-                        FallbackEngine.isSupported = function() {
-                            FallbackEngine.supportedCalled = true;
-                            return true;
-                        };
-                        FallbackEngine.addBorderImage = function() {
-                            FallbackEngine.border_arguments = $A(arguments);
-                        };
+                        FallbackEngine.supported = true;
+                        FallbackEngine.addMethods({addBorderImage : function() {
+                                FallbackEngine.border_arguments = $A(arguments);
+                            }});
 
                         var img = {};
                         img.getHeight = img.getWidth = function() { return 200; };
@@ -97,7 +107,7 @@
                         var element = new Element('div');
                         var result = Element.borderImage(element, img, "10px","20px","40px","50px");
                         assertEqual(element, result);
-                        assertNotNull(FallbackEngine.arguments);
+                        assertNotNull(FallbackEngine.border_arguments);
 
                         assertEqual(element,FallbackEngine.border_arguments.shift());
                         assertEqual(img,FallbackEngine.border_arguments.shift());
@@ -115,14 +125,11 @@
 
                     }},
 
-                    testFallbackEngineBorderImageElementMethod: function() { with(this) {
-                        FallbackEngine.isSupported = function() {
-                            FallbackEngine.supportedCalled = true;
-                            return true;
-                        };
-                        FallbackEngine.addBorderImage = function() {
-                            FallbackEngine.border_arguments = $A(arguments);
-                        };
+                testFallbackEngineBorderImageElementMethod: function() { with(this) {
+                        FallbackEngine.supported = true;
+                        FallbackEngine.addMethods({addBorderImage : function() {
+                                FallbackEngine.border_arguments = $A(arguments);
+                            }});
 
                         var img = {};
                         img.getHeight = img.getWidth = function() { return 200; };
@@ -130,7 +137,7 @@
                         var element = new Element('div');
                         var result = element.borderImage(img, "10px","20px","40px","50px");
                         assertEqual(element, result);
-                        assertNotNull(FallbackEngine.arguments);
+                        assertNotNull(FallbackEngine.border_arguments);
 
                         assertEqual(element,FallbackEngine.border_arguments.shift());
                         assertEqual(img,FallbackEngine.border_arguments.shift());
@@ -145,6 +152,103 @@
                         assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
 
                         assertEqual(true, FallbackEngine.supportedCalled);
+
+                    }},
+                //duplication
+
+                testProtoCornersNativeEngineSupported: function() { with(this) {
+                        NativeEngine.supported = true;
+                        assertEqual(true, ProtoCorners.isSupported());
+                        assertEqual(true, NativeEngine.supportedCalled);
+                    }},
+
+                testNativeEngineBorderImage: function() { with(this) {
+                        NativeEngine.supported = true;
+                        NativeEngine.addMethods({addBorderImage : function() {
+                                NativeEngine.border_arguments = $A(arguments);
+                            }});
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = ProtoCorners.borderImage(element, img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(NativeEngine.border_arguments);
+
+                        assertEqual(element,NativeEngine.border_arguments.shift());
+                        assertEqual(img,NativeEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = NativeEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, NativeEngine.supportedCalled);
+
+                    }},
+
+                testNativeEngineBorderImageElement: function() { with(this) {
+                        NativeEngine.supported = true;
+                        NativeEngine.addMethods({addBorderImage : function() {
+                                NativeEngine.border_arguments = $A(arguments);
+                            }});
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = Element.borderImage(element, img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(NativeEngine.border_arguments);
+
+                        assertEqual(element,NativeEngine.border_arguments.shift());
+                        assertEqual(img,NativeEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = NativeEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, NativeEngine.supportedCalled);
+
+                    }},
+
+                testNativeEngineBorderImageElementMethod: function() { with(this) {
+                        NativeEngine.supported = true;
+                        NativeEngine.addMethods({addBorderImage : function() {
+                                NativeEngine.border_arguments = $A(arguments);
+                            }});
+
+                        var img = {};
+                        img.getHeight = img.getWidth = function() { return 200; };
+
+                        var element = new Element('div');
+                        var result = element.borderImage(img, "10px","20px","40px","50px");
+                        assertEqual(element, result);
+                        assertNotNull(NativeEngine.border_arguments);
+
+                        assertEqual(element,NativeEngine.border_arguments.shift());
+                        assertEqual(img,NativeEngine.border_arguments.shift());
+                        var expectedCuts = new Cuts(200, 200, "10px","20px","40px","50px");
+                        var resultCuts = NativeEngine.border_arguments.shift();
+
+                        assertEqual(expectedCuts.top, resultCuts.top);
+                        assertEqual(expectedCuts.right, resultCuts.right);
+                        assertEqual(expectedCuts.bottom, resultCuts.bottom);
+                        assertEqual(expectedCuts.left, resultCuts.left);
+                        assertEqual(expectedCuts.centerWidth, resultCuts.centerWidth);
+                        assertEqual(expectedCuts.centerHeight, resultCuts.centerHeight);
+
+                        assertEqual(true, NativeEngine.supportedCalled);
 
                     }}
 
