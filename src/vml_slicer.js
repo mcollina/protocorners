@@ -37,5 +37,5 @@ var VMLSlicer = Class.create({
 
 
 VMLSlicer.isSupported = function() {
-    return document.namespaces;
+    return document.hasOwnProperty("namespaces");
 }

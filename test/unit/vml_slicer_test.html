@@ -20,6 +20,9 @@
                 <p>
                     This file tests <strong>vml_slicer.js</strong>.
                 </p>
+                <p>
+                    At least one test should appear here, otherwise something is not working properly.
+                </p>
             </div>
 
             <!-- Log output (one per Runner, via {testLog: "testlog"} option)-->
@@ -32,10 +35,8 @@
         </div>
 
         <script type="text/javascript">
-            // <![CDATA[
             if(VMLSlicer.isSupported()) {
                 new Test.Unit.Runner({
-                    // replace this with your real tests
                     setup: function() {
                         this.slicer = new VMLSlicer();
                         this.img = $('test-img');
@@ -53,12 +54,14 @@
                         }}
     
                 }, {testLog: "testlog"});
-                // For each Test.UnitRunner instance, specify the element id where results will be
-                // published; e.g. <div id="testlog"/> above.
-                // That is, you can have multiple "new Test.Unit.Runner() { ... }" on this page, just
-                // create more <div id="testlog2"></div> etc, and pass the element id to the hash above:
-                // e.g. {testLog: "testlog2"}
-                // ]]>
+            } else {
+                //this is required for autotesting          
+                new Test.Unit.Runner({
+                    setup: function() {
+                    },
+                    testNotSupported: function() { with(this) {
+                        }}
+                }, {testLog: "testlog"});
             }
         </script>
     </body>
