@@ -55,7 +55,7 @@
                     ProtoCorners.registerEngines(NativeEngine, FallbackEngine);
                 },
 
-                tearDown : function() {with(this) {
+                teardown : function() {with(this) {
                     ProtoCorners.engine = null;
                     ProtoCorners.engines = $A();
                 }},
@@ -68,6 +68,14 @@
                         FallbackEngine.supported = true;
                         assertEqual(true, ProtoCorners.isSupported());
                         assertEqual(true, FallbackEngine.supportedCalled);
+                    }},
+
+                testSupportedSingleEngineCreation: function() { with(this) {
+                        FallbackEngine.supported = true;
+                        assertEqual(true, ProtoCorners.isSupported());
+                        assertNotNull(ProtoCorners.engine);
+                        var engine = ProtoCorners.engine;
+                        assertEqual(engine, ProtoCorners.engine);
                     }},
 
                 testFallbackEngineBorderImage: function() { with(this) {

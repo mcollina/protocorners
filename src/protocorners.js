@@ -2,6 +2,10 @@
 var ProtoCorners = {
 
     isSupported : function() {
+        if(ProtoCorners.engine != null) {
+            return true;
+        }
+
         factory = ProtoCorners.engines.find(function(factory) {
             return factory.isSupported();
         });
@@ -14,7 +18,7 @@ var ProtoCorners = {
     },
 
     getEngine : function() {
-        if(!ProtoCorners.engine && !ProtoCorners.isSupported()) {
+        if(!ProtoCorners.isSupported()) {
             throw new Error("ProtoCorners not supported on this browser");
         }
         return ProtoCorners.engine;
