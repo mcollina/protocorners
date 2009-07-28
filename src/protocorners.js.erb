@@ -1,11 +1,9 @@
 <%= include 'HEADER' %>
 
-var Protocorners = {
-  Version: '<%= APP_VERSION %>',
-};
-
+<%= include 'protocorners.js' %>
 <%= include 'cuts.js' %>
 <%= include 'canvas_slicer.js' %>
 <%= include 'vml_slicer.js' %>
 <%= include 'fallback_engine.js' %>
-<%= include 'protocorners.js' %>
+<%= include 'native_engine.js' %>
+<%= include 'setup_engines.js' %>

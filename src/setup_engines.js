@@ -1,0 +1,2 @@
+
+ProtoCorners.registerEngines(NativeEngine, FallbackEngine);
