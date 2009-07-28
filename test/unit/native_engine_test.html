@@ -26,7 +26,9 @@
             <div id="testlog"></div>
 
             <!-- Put sample/test html here -->
-            <div id="sample"></div>
+            <div id="sample">
+                
+            </div>
 
             <br />
             <br />
@@ -39,7 +41,6 @@
         </div>
 
         <script type="text/javascript">
-            // <![CDATA[
             if(NativeEngine.isSupported()) {
                 new Test.Unit.Runner({
                     setup: function() {
@@ -52,7 +53,7 @@
 
                     testAddBorderImage: function() { with(this) {
                             var element = new Element("div").update("Hello World");
-                            element.setStyle({borderWidth : "10px", display : "inline", margin : "20px"});
+                            element.setStyle({borderWidth : "10px", display : "inline", margin : "20px", float: "left"});
                             $('sample').appendChild(element);
                             element.setStyle({ color : "red" });
                             var image = $("test-img");
@@ -60,13 +61,11 @@
                    }}
     
                 }, {testLog: "testlog"});
+            } else {
+                new Test.Unit.Runner({
+                    testNotSupported: function() { with(this) {}}
+                }, {testLog: "testlog"});
             }
-            // For each Test.UnitRunner instance, specify the element id where results will be
-            // published; e.g. <div id="testlog"/> above.
-            // That is, you can have multiple "new Test.Unit.Runner() { ... }" on this page, just
-            // create more <div id="testlog2"></div> etc, and pass the element id to the hash above:
-            // e.g. {testLog: "testlog2"}
-            // ]]>
         </script>
     </body>
 </html>
