@@ -52,8 +52,13 @@
                     NativeEngine.supported = false;
                     NativeEngine.border_arguments = null;
 
-                    ProtoCorners.engine = null;
+                    ProtoCorners.registerEngines(NativeEngine, FallbackEngine);
                 },
+
+                tearDown : function() {with(this) {
+                    ProtoCorners.engine = null;
+                    ProtoCorners.engines = $A();
+                }},
   
                 testProtoCornersExists: function() { with(this) {
                         assertNotNull(ProtoCorners);

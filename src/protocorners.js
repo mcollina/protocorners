@@ -2,11 +2,12 @@
 var ProtoCorners = {
 
     isSupported : function() {
-        if(NativeEngine.isSupported()) {
-            this.engine = new NativeEngine();
-            return true;
-        } else if(FallbackEngine.isSupported()) {
-            this.engine = new FallbackEngine();
+        factory = ProtoCorners.engines.find(function(factory) {
+            return factory.isSupported();
+        });
+
+        if(factory != null) {
+            ProtoCorners.engine = new factory();
             return true;
         }
         return false;
@@ -26,6 +27,13 @@ var ProtoCorners = {
         var cuts = new Cuts(image.getHeight(), image.getWidth(), args[0], args[1], args[2], args[3]);
         ProtoCorners.getEngine().addBorderImage(element, image, cuts);
         return element;
+    },
+
+    engines : $A([]),
+
+    registerEngines : function() {
+        ProtoCorners.engines = ProtoCorners.engines.concat($A(arguments));
+        return ProtoCorners;
     }
 }
 
