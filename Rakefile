@@ -86,7 +86,7 @@ JavaScriptTestTask.new(:test_units, 4711) do |t|
     t.run(tests) unless tests_to_run && !tests_to_run.include?(test_filename)
   end
 
-  %w( safari firefox ie konqueror opera ).each do |browser|
+  %w( safari firefox ie ).each do |browser|
     t.browser(browser.to_sym) unless browsers_to_test && !browsers_to_test.include?(browser)
   end
 end
