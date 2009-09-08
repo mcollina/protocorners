@@ -16,7 +16,7 @@ Notes:
     elements.
 
 More information:
-    http://NOTE-ENTER-URL.com
+    http://github.com/mcollina/protocorners
     
 Author:
     Matteo Collina, matteo.collina@gmail.com
